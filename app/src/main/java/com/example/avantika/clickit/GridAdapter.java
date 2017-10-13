@@ -2,15 +2,19 @@ package com.example.avantika.clickit;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import static com.example.avantika.clickit.R.drawable.red;
 
 
 public class GridAdapter extends BaseAdapter {
@@ -18,13 +22,15 @@ public class GridAdapter extends BaseAdapter {
     private Context context;
     private final String[] gridValues;
     private int heightOfScreen;
+    private int randNum;
 
     //Constructor to initialize values
-    public GridAdapter(Context context, String[ ] gridValues, int height) {
+    public GridAdapter(Context context, String[ ] gridValues, int height, int n) {
 
         this.context        = context;
         this.gridValues     = gridValues;
         this.heightOfScreen = height;
+        this.randNum = n;
     }
 
     @Override
@@ -62,8 +68,6 @@ public class GridAdapter extends BaseAdapter {
 
             gridView = new View(context);
 
-            // get layout from grid_item.xml ( Defined Below )
-
             gridView = inflater.inflate( R.layout.grid_item , null);
 
 
@@ -76,21 +80,13 @@ public class GridAdapter extends BaseAdapter {
             imageView.setLayoutParams(lp);
 
 
-            String arrLabel = gridValues[ position ];
 
-            if (arrLabel.equals("Windows")) {
-
-                imageView.setImageResource(R.drawable.sample2);
-
-            } else if (arrLabel.equals("iOS")) {
-
-                imageView.setImageResource(R.drawable.sample2);
-
-            }  else if (arrLabel.equals("android")) {
-
-                imageView.setImageResource(R.drawable.sample2);
-
+            if (position == randNum){
+                imageView.setImageResource(red);
+            } else {
+                imageView.setImageResource(R.drawable.white);
             }
+
         } else {
 
             gridView = (View) convertView;
