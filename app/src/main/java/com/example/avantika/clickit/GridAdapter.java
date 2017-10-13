@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
@@ -16,12 +17,14 @@ public class GridAdapter extends BaseAdapter {
 
     private Context context;
     private final String[] gridValues;
+    private int heightOfScreen;
 
     //Constructor to initialize values
-    public GridAdapter(Context context, String[ ] gridValues) {
+    public GridAdapter(Context context, String[ ] gridValues, int height) {
 
         this.context        = context;
         this.gridValues     = gridValues;
+        this.heightOfScreen = height;
     }
 
     @Override
@@ -67,6 +70,11 @@ public class GridAdapter extends BaseAdapter {
 
             ImageView imageView = (ImageView) gridView
                     .findViewById(R.id.grid_item_image);
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, heightOfScreen/2));
+            imageView.setLayoutParams(lp);
+
 
             String arrLabel = gridValues[ position ];
 

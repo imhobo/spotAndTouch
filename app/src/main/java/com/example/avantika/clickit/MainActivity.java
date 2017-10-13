@@ -40,17 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Set custom adapter (GridAdapter) to gridview
 
-        gridView.setAdapter(  new GridAdapter( this, GRID_DATA ) );
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        LinearLayout ll = (LinearLayout) findViewById(R.id.linera1);
-        ImageView imageView = ll.findViewById(R.id.grid_item_image);
-        imageView.getLayoutParams().height = height/2;
-        imageView.requestLayout();
+        gridView.setAdapter(  new GridAdapter( this, GRID_DATA, height ) );
 
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                     int position, long id) {
 
 
-                Toast.makeText(MainActivity.this,"Hello", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, Integer.toString(position), Toast.LENGTH_SHORT).show();
 
             }
         });
