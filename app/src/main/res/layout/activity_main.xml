@@ -9,9 +9,9 @@
     tools:context="com.example.avantika.clickit.MainActivity" >
 
     <LinearLayout
-        android:id="@+id/ll1"
+        android:id="@+id/lltop"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0.2">
 
         <TextView
@@ -21,14 +21,15 @@
             android:layout_height="match_parent"/>
 
     </LinearLayout>
-    <GridView
-        android:id="@+id/gridview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"
-        android:stretchMode="columnWidth"
+
+    <LinearLayout
+        android:id="@+id/llgrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_weight="0.8">
-    </GridView>
+
+    </LinearLayout>
+
 
 </LinearLayout>

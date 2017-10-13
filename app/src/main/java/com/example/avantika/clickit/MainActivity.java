@@ -2,8 +2,11 @@ package com.example.avantika.clickit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,76 +30,95 @@ import java.util.logging.Handler;
 import java.util.zip.Inflater;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    GridView gridView;
-    public int score = 0;
+
+    int score = 0;
     TextView tv;
+    int orderGrid = 2;
+    LinearLayout[][] verLayout;
+    int cur;
+    int prev;
+    String selectedColor = "#FF0000";
+    String backColor = "#FFFFFF";
 
-    // This Data show in grid ( Used by adapter )
-
-    static final String[ ] GRID_DATA = new String[] {
-            "Windows" ,
-            "iOS",
-            "android",
-            "Windows"
-    };
-
-
-    void changeGrid(final int height, final int n, final TextView tv){
-
-        gridView.setAdapter(  new GridAdapter( this, GRID_DATA, height, n ) );
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View v,
-                    int position, long id) {
-
-
-                if (position == n) {
-                    score++;
-                    tv.setText(Integer.toString(score));
-                    Log.d("DEBUG","correct");
-                    Random rand = new Random();
-                    int next = rand.nextInt(4);
-                    while(next == n) {
-                        next = rand.nextInt(4);
-                    }
-                    changeGrid(height, next, tv);
-                }
-                else {
-                    Log.d("DEBUG", "incorrect");
-                }
-            }
-        });
-    }
-
-
-
+    //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activity_main );
 
-        // Get gridview object from xml file
-
-        gridView = (GridView) findViewById(R.id.gridview);
-        gridView.setNumColumns(2);
-
         tv = (TextView) findViewById(R.id.tv);
+        tv.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
 
-        // Set custom adapter (GridAdapter) to gridview
 
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        final int height = size.y;
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int width = size.x;
+//        final int height = size.y;
+//
+
+
+        LinearLayout parentLayout = (LinearLayout)findViewById(R.id.llgrid);
+        parentLayout.setBackgroundColor(Color.parseColor(backColor));
+        parentLayout.setWeightSum(orderGrid);
+
+        LinearLayout[] horLayout = new LinearLayout[orderGrid];
+        verLayout = new LinearLayout[orderGrid][orderGrid];
+
+        for(int i = 0; i < orderGrid; i++) {
+
+            horLayout[i] = new LinearLayout(this);
+            horLayout[i].setOrientation(LinearLayout.HORIZONTAL);
+            horLayout[i].setWeightSum(orderGrid);
+            horLayout[i].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+            parentLayout.addView(horLayout[i]);
+
+            for(int j = 0; j < orderGrid; j++)
+            {
+                verLayout[i][j] = new LinearLayout(this);
+                verLayout[i][j].setId(i*orderGrid + j);
+                verLayout[i][j].setOrientation(LinearLayout.VERTICAL);
+                verLayout[i][j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
+                horLayout[i].addView(verLayout[i][j]);
+                verLayout[i][j].setOnClickListener(this);
+            }
+        }
+
         Random rand = new Random();
-        int n = rand.nextInt(4);
-        changeGrid(height, n, tv);
+        cur = rand.nextInt(orderGrid*orderGrid);
+        prev = cur;
+        verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
+        //Change this line
+//        verLayout[cur / orderGrid][cur % orderGrid].setBackground(getResources().getDrawable(R.drawable.sample2));
 
+    }
+
+   // @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onClick(View view) {
+
+        int id = view.getId();
+
+        if(id == cur)
+        {
+            score++;
+            tv.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
+
+            Random rand = new Random();
+            while(prev==cur) {
+                cur = rand.nextInt(orderGrid * orderGrid);
+            }
+            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
+//            verLayout[cur / orderGrid][cur % orderGrid].setBackground(getResources().getDrawable(R.drawable.sample2));
+            verLayout[prev / orderGrid][prev % orderGrid].setBackgroundColor(Color.parseColor(backColor));
+//            verLayout[prev / orderGrid][prev % orderGrid].setBackgroundResource(0);
+            prev=cur;
+        }
 
     }
 
