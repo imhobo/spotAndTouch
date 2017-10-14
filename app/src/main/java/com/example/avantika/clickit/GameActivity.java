@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tvCount = (TextView) findViewById(R.id.countdown);
         tvScore = (TextView) findViewById(R.id.score);
         tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
+
 
 
 //        Display display = getWindowManager().getDefaultDisplay();
@@ -91,6 +93,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         prev = cur;
         verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
         verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
+
 
         timeRemaining = totalTime;
         tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
@@ -165,8 +168,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void resumeGame(){
-        enaableGrid();
 
+        enaableGrid();
         timer = new CountDownTimer(timeRemaining * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
