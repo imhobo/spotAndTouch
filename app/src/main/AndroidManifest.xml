@@ -10,14 +10,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".GameActivity"
             android:label="@string/app_name"
             android:theme="@style/fullscreen">
+        </activity>
+        <activity android:name=".EndGame">
+        </activity>
+        <activity android:name=".OptionsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ChooseMode">
+        </activity>
+        <activity android:name=".SettingsActivity">
         </activity>
     </application>
 

@@ -2,4 +2,13 @@
     <string name="app_name">ClickIT</string>
     <string name="score">Score :</string>
     <string name="title_activity_show_score">ShowScore</string>
+    <string name="choose_grid">Grid size</string>
+    <string name="choose_time">Time</string>
+
+    <string-array name="allowed_grid_sizes">
+        <item>2x2</item>
+        <item>3x3</item>
+        <item>4x4</item>
+        <item>5x5</item>
+    </string-array>
 </resources>

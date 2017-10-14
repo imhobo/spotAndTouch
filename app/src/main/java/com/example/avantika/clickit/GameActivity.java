@@ -1,5 +1,6 @@
 package com.example.avantika.clickit;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -12,33 +13,32 @@ import android.widget.TextView;
 import java.util.Random;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     int score = 0;
     TextView tvCount, tvScore;
-    int orderGrid = 2;
+    public static int orderGrid = 2;
     LinearLayout[][] verLayout;
     int cur;
     int prev;
     String selectedColor = "#FF0000";
     String backColor = "#FFFFFF";
     ProgressBar pb;
-    int totalTime;
+    public static int totalTime = 15;
+
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView( R.layout.activity_main );
+        setContentView( R.layout.activity_game);
 
         //tv = (TextView) findViewById(R.id.tv);
         tvCount = (TextView) findViewById(R.id.countdown);
         tvScore = (TextView) findViewById(R.id.score);
         tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
-
-        totalTime = 10; // in seconds
 
 
 //        Display display = getWindowManager().getDefaultDisplay();
@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
                 float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
                 pb.setProgress((int) percentageProgressBar);
+                Intent myIntent = new Intent(GameActivity.this, EndGame.class);
+                myIntent.putExtra("score", Integer.toString(score)); //Optional parameters
+                GameActivity.this.startActivity(myIntent);
+                finish();
             }
 
         }.start();

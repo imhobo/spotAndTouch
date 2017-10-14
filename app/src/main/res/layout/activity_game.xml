@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:weightSum="1"
     android:orientation="vertical"
-    tools:context="com.example.avantika.clickit.MainActivity" >
+    tools:context="com.example.avantika.clickit.GameActivity" >
 
     <LinearLayout
         android:id="@+id/lltop"
@@ -43,6 +43,8 @@
         android:id="@+id/llgrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@drawable/custom_border"
         android:orientation="vertical"
         android:layout_weight="0.8">
 
