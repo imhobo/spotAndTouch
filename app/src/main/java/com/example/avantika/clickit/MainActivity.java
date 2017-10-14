@@ -1,46 +1,30 @@
 package com.example.avantika.clickit;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.os.Build;
 import android.os.CountDownTimer;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Handler;
-import java.util.zip.Inflater;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     int score = 0;
-    TextView tv;
+    TextView tvCount, tvScore;
     int orderGrid = 2;
     LinearLayout[][] verLayout;
     int cur;
     int prev;
     String selectedColor = "#FF0000";
     String backColor = "#FFFFFF";
+    ProgressBar pb;
+    int totalTime;
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -49,8 +33,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activity_main );
 
-        tv = (TextView) findViewById(R.id.tv);
-        tv.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
+        //tv = (TextView) findViewById(R.id.tv);
+        tvCount = (TextView) findViewById(R.id.countdown);
+        tvScore = (TextView) findViewById(R.id.score);
+        tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
+
+        totalTime = 10; // in seconds
 
 
 //        Display display = getWindowManager().getDefaultDisplay();
@@ -59,7 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        int width = size.x;
 //        final int height = size.y;
 //
-
+        pb = (ProgressBar) findViewById(R.id.progressBar);
+        pb.setProgress(0);
 
         LinearLayout parentLayout = (LinearLayout)findViewById(R.id.llgrid);
         parentLayout.setBackgroundColor(Color.parseColor(backColor));
@@ -88,26 +77,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 verLayout[i][j].setOnClickListener(this);
             }
         }
-
         Random rand = new Random();
         cur = rand.nextInt(orderGrid*orderGrid);
         prev = cur;
         verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
-        //Change this line
-//        verLayout[cur / orderGrid][cur % orderGrid].setBackground(getResources().getDrawable(R.drawable.sample2));
+        new CountDownTimer(totalTime * 1000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                long timeRemaining = millisUntilFinished / 1000;
+                tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
+                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
+                pb.setProgress((int) percentageProgressBar);
+            }
+
+            public void onFinish() {
+                long timeRemaining = 0;
+                tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
+                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
+                pb.setProgress((int) percentageProgressBar);
+            }
+
+        }.start();
     }
 
    // @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onClick(View view) {
-
         int id = view.getId();
 
         if(id == cur)
         {
             score++;
-            tv.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
+            tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
 
             Random rand = new Random();
             while(prev==cur) {
@@ -121,5 +122,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
 
 }

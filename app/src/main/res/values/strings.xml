@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ClickIT</string>
     <string name="score">Score :</string>
+    <string name="title_activity_show_score">ShowScore</string>
 </resources>
