@@ -46,7 +46,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 //        display.getSize(size);
 //        int width = size.x;
 //        final int height = size.y;
-//
+
         pb = (ProgressBar) findViewById(R.id.progressBar);
         pb.setProgress(0);
 
