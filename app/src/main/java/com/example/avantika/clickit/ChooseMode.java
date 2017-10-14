@@ -19,6 +19,7 @@ public class ChooseMode extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(ChooseMode.this, GameActivity.class);
+                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 ChooseMode.this.startActivity(myIntent);
                 finish();
             }
