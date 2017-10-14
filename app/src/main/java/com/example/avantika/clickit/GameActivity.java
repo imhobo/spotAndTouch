@@ -26,6 +26,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     String backColor = "#FFFFFF";
     ProgressBar pb;
     public static int totalTime = 15;
+    float progressMultiplier = 2f;
 
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -50,9 +51,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         pb = (ProgressBar) findViewById(R.id.progressBar);
         pb.setProgress(0);
+        pb.setScaleY(pb.getScaleY()*progressMultiplier);
 
         LinearLayout parentLayout = (LinearLayout)findViewById(R.id.llgrid);
-        parentLayout.setBackgroundColor(Color.parseColor(backColor));
+//        parentLayout.setBackgroundColor(Color.parseColor(backColor));
         parentLayout.setWeightSum(orderGrid);
 
         LinearLayout[] horLayout = new LinearLayout[orderGrid];
@@ -75,6 +77,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 verLayout[i][j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
                 horLayout[i].addView(verLayout[i][j]);
+                verLayout[i][j].setBackgroundResource(R.drawable.custom_border_unselected);
+
                 verLayout[i][j].setOnClickListener(this);
             }
         }
@@ -82,6 +86,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         cur = rand.nextInt(orderGrid*orderGrid);
         prev = cur;
         verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
+        verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
         new CountDownTimer(totalTime * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
@@ -120,8 +125,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 cur = rand.nextInt(orderGrid * orderGrid);
             }
             verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
+            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
 //            verLayout[cur / orderGrid][cur % orderGrid].setBackground(getResources().getDrawable(R.drawable.sample2));
             verLayout[prev / orderGrid][prev % orderGrid].setBackgroundColor(Color.parseColor(backColor));
+            verLayout[prev/orderGrid][prev%orderGrid].setBackgroundResource(R.drawable.custom_border_unselected);
 //            verLayout[prev / orderGrid][prev % orderGrid].setBackgroundResource(0);
             prev=cur;
         }

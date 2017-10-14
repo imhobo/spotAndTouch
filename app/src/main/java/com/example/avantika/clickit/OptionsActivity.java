@@ -24,7 +24,6 @@ public class OptionsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent myIntent = new Intent(OptionsActivity.this, ChooseMode.class);
                 OptionsActivity.this.startActivity(myIntent);
-                finish();
             }
         });
 
