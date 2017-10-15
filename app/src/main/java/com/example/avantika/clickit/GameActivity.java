@@ -7,13 +7,17 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Random;
 
 
@@ -29,11 +33,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     String selectedColor = "#FF0000";
     String backColor = "#FFFFFF";
     ProgressBar pb;
-    public static int totalTime = 15;
+    public static long totalTime = 15000;
     float progressMultiplier = 2f;
     CountDownTimer timer;
     long timeRemaining;
     LinearLayout maskLayout;
+    LinearLayout gridLayout;
+    RelativeLayout parentLayout;
+    int tickTimer = 10;
 
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -41,7 +48,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView( R.layout.activity_game);
+        setContentView(R.layout.activity_game);
 
         //tv = (TextView) findViewById(R.id.tv);
         tvCount = (TextView) findViewById(R.id.countdown);
@@ -49,38 +56,33 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
 
 
-        maskLayout = (LinearLayout)findViewById(R.id.llmask);
+        parentLayout = (RelativeLayout) findViewById(R.id.rlParent);
+        maskLayout = (LinearLayout) findViewById(R.id.llmask);
 
-//        Display display = getWindowManager().getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        int width = size.x;
-//        final int height = size.y;
-//
 
         pb = (ProgressBar) findViewById(R.id.progressBar);
         pb.setProgress(0);
-        pb.setScaleY(pb.getScaleY()*progressMultiplier);
+        pb.setScaleY(pb.getScaleY() * progressMultiplier);
 
-        LinearLayout parentLayout = (LinearLayout)findViewById(R.id.llgrid);
-//        parentLayout.setBackgroundColor(Color.parseColor(backColor));
-        parentLayout.setWeightSum(orderGrid);
+        gridLayout = (LinearLayout) findViewById(R.id.llgrid);
+//        gridLayout.setBackgroundColor(Color.parseColor(backColor));
+        gridLayout.setWeightSum(orderGrid);
 
         LinearLayout[] horLayout = new LinearLayout[orderGrid];
         verLayout = new LinearLayout[orderGrid][orderGrid];
 
-        for(int i = 0; i < orderGrid; i++) {
+        for (int i = 0; i < orderGrid; i++) {
 
             horLayout[i] = new LinearLayout(this);
             horLayout[i].setOrientation(LinearLayout.HORIZONTAL);
             horLayout[i].setWeightSum(orderGrid);
             horLayout[i].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
-            parentLayout.addView(horLayout[i]);
+            gridLayout.addView(horLayout[i]);
 
-            for(int j = 0; j < orderGrid; j++) {
+            for (int j = 0; j < orderGrid; j++) {
                 verLayout[i][j] = new LinearLayout(this);
-                verLayout[i][j].setId(i*orderGrid + j);
+                verLayout[i][j].setId(i * orderGrid + j);
                 verLayout[i][j].setOrientation(LinearLayout.VERTICAL);
                 verLayout[i][j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
@@ -90,40 +92,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 verLayout[i][j].setOnClickListener(this);
             }
         }
-        Random rand = new Random();
-        cur = rand.nextInt(orderGrid*orderGrid);
-        prev = cur;
-        verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
-        verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
 
-
-        timeRemaining = totalTime;
-        tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
-
-        timer = new CountDownTimer(totalTime * 1000, 1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeRemaining = millisUntilFinished / 1000;
-                tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
-                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
-                pb.setProgress((int) percentageProgressBar);
-            }
-
-            public void onFinish() {
-                timeRemaining = 0;
-                tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
-                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
-                pb.setProgress((int) percentageProgressBar);
-                Intent myIntent = new Intent(GameActivity.this, EndGame.class);
-                myIntent.putExtra("score", Integer.toString(score)); //Optional parameters
-                GameActivity.this.startActivity(myIntent);
-                finish();
-            }
-
-        };
-
-        timer.start();
+        disableGrid();
+        findViewById(R.id.tvTap).setVisibility(View.VISIBLE);
+        maskLayout.setOnClickListener(this);
     }
 
     // @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -131,7 +103,27 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         int id = view.getId();
 
-        if(id == cur)
+        if(id == R.id.llmask)
+        {
+            maskLayout.setOnClickListener(null);
+
+            timeRemaining = totalTime;
+            tvCount.setText("Seconds remaining: " + prettyFloat(timeRemaining));
+
+            Random rand = new Random();
+            cur = rand.nextInt(orderGrid * orderGrid);
+            prev = cur;
+
+            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
+            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
+
+
+            startTimer();
+            findViewById(R.id.tvTap).setVisibility(View.GONE);
+            enableGrid();
+        }
+
+        else if(id == cur)
         {
             score++;
             tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
@@ -162,36 +154,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     void resumeGame(){
 
         enableGrid();
-        timer = new CountDownTimer(timeRemaining * 1000, 1000) {
+        startTimer();
 
-            public void onTick(long millisUntilFinished) {
-                timeRemaining = millisUntilFinished / 1000;
-                tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
-                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
-                pb.setProgress((int) percentageProgressBar);
-            }
-
-            public void onFinish() {
-                timeRemaining = 0;
-                tvCount.setText("Seconds remaining: " + Long.toString(timeRemaining));
-                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
-                pb.setProgress((int) percentageProgressBar);
-                Intent myIntent = new Intent(GameActivity.this, EndGame.class);
-                myIntent.putExtra("score", Integer.toString(score)); //Optional parameters
-                GameActivity.this.startActivity(myIntent);
-                finish();
-            }
-
-        };
-        timer.start();
     }
 
     void pauseGame(){
+
+        if(timer==null)return;
         timer.cancel();
         disableGrid();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Game Paused");
-        builder.setMessage("Would you like to continue game?");
+        builder.setMessage("Would you like to continue the game?");
 
         // add the buttons
         builder.setPositiveButton("Continue", new DialogInterface.OnClickListener(){
@@ -205,6 +179,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(DialogInterface dialog, int which) {
                 Intent myIntent = new Intent(GameActivity.this, OptionsActivity.class);
                 GameActivity.this.startActivity(myIntent);
+                if(timer!=null)
+                    timer.cancel();
                 finish();
             }
         });
@@ -213,6 +189,66 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    void tapToStart(){
+        timer.cancel();
+        disableGrid();
+        parentLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getAction();
+                switch(action) {
+                    case MotionEvent.ACTION_DOWN:
+                        resumeGame();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+    }
+
+    String prettyFloat(long number)
+    {
+
+        Float floatValue = (float)number/1000;
+        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumFractionDigits(2);
+        formatter.setRoundingMode(RoundingMode.HALF_UP);
+        floatValue = new Float(formatter.format(floatValue));
+        return String.format ("%.2f", floatValue);
+
+    }
+
+    void startTimer()
+    {
+        timer = new CountDownTimer(timeRemaining, tickTimer) {
+
+            public void onTick(long millisUntilFinished) {
+                timeRemaining = millisUntilFinished;
+                tvCount.setText("Seconds remaining: " + prettyFloat(timeRemaining));
+                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
+                pb.setProgress((int) percentageProgressBar);
+            }
+
+            public void onFinish() {
+                timeRemaining = 0;
+                tvCount.setText("Seconds remaining: " + prettyFloat(timeRemaining));
+                float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
+                pb.setProgress((int) percentageProgressBar);
+                Intent myIntent = new Intent(GameActivity.this, EndGame.class);
+                myIntent.putExtra("score", Integer.toString(score)); //Optional parameters
+                GameActivity.this.startActivity(myIntent);
+                finish();
+            }
+
+        };
+        timer.start();
+    }
+
 
     @Override
     public void onBackPressed() {

@@ -60,13 +60,13 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         else if(spinner.getId() == R.id.time) {
             switch (allowedTimes[position]){
                 case "5":
-                    GameActivity.totalTime = 5;
+                    GameActivity.totalTime = 5000;
                     break;
                 case "15":
-                    GameActivity.totalTime = 15;
+                    GameActivity.totalTime = 15000;
                     break;
                 case "30":
-                    GameActivity.totalTime =30;
+                    GameActivity.totalTime = 30000;
                     break;
             }
         }

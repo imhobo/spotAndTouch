@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rlParent"
     >
 
     <LinearLayout
@@ -21,6 +22,7 @@
             android:orientation="vertical"
             android:layout_weight="0.2"
             android:weightSum="1">
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -65,10 +67,24 @@
         android:id="@+id/llmask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#15676767"
+        android:background="#CC676767"
         android:clickable="true"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvTap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tap to\nStart"
+            android:gravity="center"
+            android:textSize="60sp"
+            android:textColor="#FFFFFF"
+            android:textStyle = "bold"
+            android:layout_gravity="center_vertical"
+            android:visibility="gone"
+            />
+
     </LinearLayout>
 
 </RelativeLayout>
