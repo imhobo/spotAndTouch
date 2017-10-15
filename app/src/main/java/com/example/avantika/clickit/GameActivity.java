@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Random;
+import java.util.logging.Logger;
 
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -105,6 +107,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         int width = displayMetrics.widthPixels;
         int widthBox = (int)Math.ceil((float)width/orderGrid);
         int heightBox = (int) Math.ceil(((float)height*0.8f)/orderGrid);
+
+        Log.d("INFO:HEIGHT", String.valueOf(height));
+        Log.d("INFO:WIDTH", String.valueOf(width));
+        Log.d("INFO:HEIGHTBOX", String.valueOf(heightBox));
+        Log.d("INFO:WIDTHBOX", String.valueOf(widthBox));
 
         selectedBox = getScaledDrawable(R.drawable.close_window, widthBox, heightBox);
         unselectedBox = getScaledDrawable(R.drawable.open_window, widthBox, heightBox);
