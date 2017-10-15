@@ -33,6 +33,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     float progressMultiplier = 2f;
     CountDownTimer timer;
     long timeRemaining;
+    LinearLayout maskLayout;
 
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -48,6 +49,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
 
 
+        maskLayout = (LinearLayout)findViewById(R.id.llmask);
 
 //        Display display = getWindowManager().getDefaultDisplay();
 //        Point size = new Point();
@@ -150,26 +152,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void disableGrid(){
-        for (int j = 0; j< orderGrid; j++){
-            for (int k = 0; k < orderGrid; k++){
-//                verLayout[j][k].setClickable(false);
-                verLayout[j][k].setEnabled(false);
-            }
-        }
+        maskLayout.setVisibility(View.VISIBLE);
     }
 
-    void enaableGrid(){
-        for (int j = 0; j< orderGrid; j++){
-            for (int k = 0; k < orderGrid; k++){
-//                verLayout[j][k].setClickable(false);
-                verLayout[j][k].setEnabled(true);
-            }
-        }
+    void enableGrid(){
+        maskLayout.setVisibility(View.GONE);
     }
 
     void resumeGame(){
 
-        enaableGrid();
+        enableGrid();
         timer = new CountDownTimer(timeRemaining * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
