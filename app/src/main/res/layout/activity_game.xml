@@ -24,32 +24,41 @@
             android:weightSum="1">
 
 
-            <TextView
+            <LinearLayout
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/score"
-                android:gravity="center"
-                android:layout_weight="0.2"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/countdown"
-                android:gravity="center"
-                android:layout_weight="0.2"/>
+                android:layout_weight="0.6"
+                android:weightSum="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/score"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_weight="0.5"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/countdown"
+                    android:gravity="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:layout_weight="0.5"
+                    />
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.6"/>
+                android:layout_weight="0.4"/>
 
 
         </LinearLayout>
-        <!--<TextView-->
-            <!--android:id="@+id/tap_to_start"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"/>-->
         <LinearLayout
             android:id="@+id/llgrid"
             android:layout_width="match_parent"
