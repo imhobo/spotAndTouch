@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -30,17 +32,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     int score = 0;
     TextView tvCount, tvScore;
-    public static int orderGrid = 2;
+    int orderGrid;
     LinearLayout[][] verLayout;
     int cur;
     int prev;
-    String selectedColor = "#FF0000";
-    String backColor = "#FFFFFF";
     ProgressBar pb;
-    public static long totalTime = 15000;
-    float progressMultiplier = 2f;
+    int totalTime;
     CountDownTimer timer;
-    long timeRemaining;
+    int timeRemaining;
     LinearLayout maskLayout;
     LinearLayout gridLayout;
     RelativeLayout parentLayout;
@@ -62,13 +61,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
 
 
+        // if not in shared pref orderGrid = Constants.defaultOrderGrid;
         parentLayout = (RelativeLayout) findViewById(R.id.rlParent);
         maskLayout = (LinearLayout) findViewById(R.id.llmask);
 
+        SharedPreferences prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        orderGrid = prefs.getInt(Constants.ORDER_GRID_KEY, Constants.DEFAULT_ORDER_GRID);
+        totalTime = prefs.getInt(Constants.TOTAL_TIME_KEY, Constants.DEFAULT_TOTAL_TIME);
+
 
         pb = (ProgressBar) findViewById(R.id.progressBar);
-        pb.setProgress(0);
-        pb.setScaleY(pb.getScaleY() * progressMultiplier);
+        pb.setProgress(Constants.INITIAL_PROGRESS);
+        pb.setScaleY(pb.getScaleY() * Constants.PROGRESS_MULTIPLIER);
 
         gridLayout = (LinearLayout) findViewById(R.id.llgrid);
         gridLayout.setWeightSum(orderGrid);
@@ -131,18 +135,19 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         {
             maskLayout.setOnClickListener(null);
 
+            // is not in shared pref: totalTime = Constants.defaultTotalTime;
             timeRemaining = totalTime;
-            tvCount.setText("Seconds remaining: " + prettyFloat(timeRemaining));
+            tvCount.setText("Time: " + prettyFloat(timeRemaining));
 
             Random rand = new Random();
             cur = rand.nextInt(orderGrid * orderGrid);
             prev = cur;
 
 
+
             setBackgroundDrawable(verLayout[cur/orderGrid][cur%orderGrid], selectedBox);
 //            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
 //            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
-
 
             startTimer();
             findViewById(R.id.tvTap).setVisibility(View.GONE);
@@ -246,10 +251,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     String prettyFloat(long number)
     {
 
-        Float floatValue = (float)number/1000;
+        Float floatValue = (float)number/Constants.MILLISECONDS_IN_SECONDS;
         NumberFormat formatter = NumberFormat.getInstance(Locale.US);
-        formatter.setMaximumFractionDigits(2);
-        formatter.setMinimumFractionDigits(2);
+        formatter.setMaximumFractionDigits(Constants.DECIMAL_DIGITS);
+        formatter.setMinimumFractionDigits(Constants.DECIMAL_DIGITS);
         formatter.setRoundingMode(RoundingMode.HALF_UP);
         floatValue = new Float(formatter.format(floatValue));
         return String.format ("%.2f", floatValue);
@@ -258,18 +263,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     void startTimer()
     {
-        timer = new CountDownTimer(timeRemaining, tickTimer) {
+        timer = new CountDownTimer(timeRemaining, Constants.TICK_TIMER) {
 
             public void onTick(long millisUntilFinished) {
-                timeRemaining = millisUntilFinished;
-                tvCount.setText("Seconds remaining: " + prettyFloat(timeRemaining));
+                timeRemaining = (int)millisUntilFinished;
+                tvCount.setText("Time: " + prettyFloat(timeRemaining));
                 float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
                 pb.setProgress((int) percentageProgressBar);
             }
 
             public void onFinish() {
                 timeRemaining = 0;
-                tvCount.setText("Seconds remaining: " + prettyFloat(timeRemaining));
+                tvCount.setText("Time: " + prettyFloat(timeRemaining));
                 float percentageProgressBar = (((float) totalTime - (float) timeRemaining)/totalTime) * 100;
                 pb.setProgress((int) percentageProgressBar);
                 Intent myIntent = new Intent(GameActivity.this, EndGame.class);

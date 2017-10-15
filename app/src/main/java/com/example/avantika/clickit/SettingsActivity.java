@@ -1,6 +1,8 @@
 package com.example.avantika.clickit;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,14 +19,20 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
     String[] allowedGridSizes = { "2x2", "3x3", "5x5"  };
     String[] allowedTimes = {"5", "15", "30"};
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+    Spinner gridSize, chooseTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Spinner gridSize = (Spinner) findViewById(R.id.grid_size);
-        Spinner chooseTime = (Spinner) findViewById(R.id.time);
+        prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        editor = prefs.edit();
+
+        gridSize = (Spinner) findViewById(R.id.grid_size);
+        chooseTime = (Spinner) findViewById(R.id.time);
         gridSize.setOnItemSelectedListener(this);
         chooseTime.setOnItemSelectedListener(this);
 
@@ -32,11 +40,12 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         sizes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gridSize.setAdapter(sizes);
 
+
         ArrayAdapter times = new ArrayAdapter(this,android.R.layout.simple_spinner_item,allowedTimes);
         times.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         chooseTime.setAdapter(times);
-        chooseTime.setSelection(1);
 
+        setDefaultSelections();
 
     }
 
@@ -47,30 +56,65 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         if(spinner.getId() == R.id.grid_size) {
             switch (allowedGridSizes[position]) {
                 case "2x2":
-                    GameActivity.orderGrid = 2;
+                    editor = prefs.edit();
+                    editor.putInt(Constants.ORDER_GRID_KEY, 2);
+                    editor.apply();
                     break;
                 case "3x3":
-                    GameActivity.orderGrid = 3;
+                    editor = prefs.edit();
+                    editor.putInt(Constants.ORDER_GRID_KEY, 3);
+                    editor.apply();
                     break;
                 case "5x5":
-                    GameActivity.orderGrid = 5;
+                    editor = prefs.edit();
+                    editor.putInt(Constants.ORDER_GRID_KEY, 5);
+                    editor.apply();
                     break;
             }
         }
         else if(spinner.getId() == R.id.time) {
             switch (allowedTimes[position]){
                 case "5":
-                    GameActivity.totalTime = 5000;
+                    editor = prefs.edit();
+                    editor.putInt(Constants.TOTAL_TIME_KEY, 5000);
+                    editor.apply();
                     break;
                 case "15":
-                    GameActivity.totalTime = 15000;
+                    editor = prefs.edit();
+                    editor.putInt(Constants.TOTAL_TIME_KEY, 15000);
+                    editor.apply();
                     break;
                 case "30":
-                    GameActivity.totalTime = 30000;
+                    editor = prefs.edit();
+                    editor.putInt(Constants.TOTAL_TIME_KEY, 30000);
+                    editor.apply();
                     break;
             }
         }
         //Toast.makeText(getApplicationContext(),allowedGridSizes[position] ,Toast.LENGTH_LONG).show();
+    }
+
+    void setDefaultSelections() {
+        int selectedOrderGrid = prefs.getInt(Constants.ORDER_GRID_KEY, Constants.DEFAULT_ORDER_GRID);
+        int selectedTotalTime = prefs.getInt(Constants.TOTAL_TIME_KEY, Constants.DEFAULT_TOTAL_TIME);
+
+        switch (selectedOrderGrid) {
+            case 2: gridSize.setSelection(0);
+                break;
+            case 3: gridSize.setSelection(1);
+                break;
+            case 5: gridSize.setSelection(2);
+                break;
+        }
+
+        switch (selectedTotalTime) {
+            case 5000: chooseTime.setSelection(0);
+                break;
+            case 15000: chooseTime.setSelection(1);
+                break;
+            case 30000: chooseTime.setSelection(2);
+                break;
+        }
     }
 
     @Override
