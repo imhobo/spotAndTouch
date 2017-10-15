@@ -2,12 +2,16 @@ package com.example.avantika.clickit;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -41,6 +45,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout gridLayout;
     RelativeLayout parentLayout;
     int tickTimer = 10;
+    Drawable selectedBox;
+    Drawable unselectedBox;
 
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -65,7 +71,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         pb.setScaleY(pb.getScaleY() * progressMultiplier);
 
         gridLayout = (LinearLayout) findViewById(R.id.llgrid);
-//        gridLayout.setBackgroundColor(Color.parseColor(backColor));
         gridLayout.setWeightSum(orderGrid);
 
         LinearLayout[] horLayout = new LinearLayout[orderGrid];
@@ -87,9 +92,28 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 verLayout[i][j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
                 horLayout[i].addView(verLayout[i][j]);
-                verLayout[i][j].setBackgroundResource(R.drawable.custom_border_unselected);
+//                verLayout[i][j].setBackgroundResource(R.drawable.custom_border_unselected);
+//                verLayout[i][j].setBackgroundResource();
 
                 verLayout[i][j].setOnClickListener(this);
+            }
+        }
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        int widthBox = (int)Math.ceil((float)width/orderGrid);
+        int heightBox = (int) Math.ceil(((float)height*0.8f)/orderGrid);
+
+        selectedBox = getScaledDrawable(R.drawable.close_window, widthBox, heightBox);
+        unselectedBox = getScaledDrawable(R.drawable.open_window, widthBox, heightBox);
+
+        for(int i=0;i<orderGrid;i++)
+        {
+            for(int j=0;j<orderGrid;j++)
+            {
+                setBackgroundDrawable(verLayout[i][j], unselectedBox);
             }
         }
 
@@ -114,8 +138,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             cur = rand.nextInt(orderGrid * orderGrid);
             prev = cur;
 
-            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
-            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
+
+            setBackgroundDrawable(verLayout[cur/orderGrid][cur%orderGrid], selectedBox);
+//            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
+//            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
 
 
             startTimer();
@@ -132,12 +158,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             while(prev==cur) {
                 cur = rand.nextInt(orderGrid * orderGrid);
             }
-            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
-            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
-//            verLayout[cur / orderGrid][cur % orderGrid].setBackground(getResources().getDrawable(R.drawable.sample2));
-            verLayout[prev / orderGrid][prev % orderGrid].setBackgroundColor(Color.parseColor(backColor));
-            verLayout[prev/orderGrid][prev%orderGrid].setBackgroundResource(R.drawable.custom_border_unselected);
-//            verLayout[prev / orderGrid][prev % orderGrid].setBackgroundResource(0);
+//            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
+//            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
+            setBackgroundDrawable(verLayout[cur/orderGrid][cur%orderGrid], selectedBox);
+
+//            verLayout[prev / orderGrid][prev % orderGrid].setBackgroundColor(Color.parseColor(backColor));
+//            verLayout[prev/orderGrid][prev%orderGrid].setBackgroundResource(R.drawable.custom_border_unselected);
+            setBackgroundDrawable(verLayout[prev/orderGrid][prev%orderGrid], unselectedBox);
             prev=cur;
         }
 
@@ -255,6 +282,24 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         timer.start();
     }
 
+
+    Drawable getScaledDrawable(int drawable, int width, int height) {
+        Drawable dr = ContextCompat.getDrawable(this, drawable);
+        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
+        Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, width, height, true));
+        return d;
+    }
+
+    void setBackgroundDrawable(LinearLayout layout, Drawable drawable)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            layout.setBackground(drawable);
+        }
+        else
+        {
+            layout.setBackgroundDrawable(drawable);
+        }
+    }
 
     @Override
     public void onBackPressed() {
