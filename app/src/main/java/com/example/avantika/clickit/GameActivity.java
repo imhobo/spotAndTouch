@@ -141,6 +141,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             prev=cur;
         }
 
+        else if(id!=cur && id>=0 && id< orderGrid*orderGrid)
+        {
+            score--;
+            tvScore.setText(getResources().getString(R.string.score) + " " + Integer.toString(score));
+        }
+
     }
 
     void disableGrid(){
