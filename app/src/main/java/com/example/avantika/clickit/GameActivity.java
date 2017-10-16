@@ -225,6 +225,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
         dialog.show();
     }
 
