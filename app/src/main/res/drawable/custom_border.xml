@@ -8,7 +8,9 @@
                 android:bottomRightRadius="0dp"
                 android:bottomLeftRadius="0dp"
                 />
-            <stroke android:width="10dp" android:color="#B22222" />
+            <stroke android:width="7dp" android:color="#317677" />
         </shape>
     </item>
 </layer-list>
+
+    <!--B22222-->
