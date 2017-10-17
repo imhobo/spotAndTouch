@@ -1,4 +1,4 @@
-package com.example.avantika.clickit;
+package com.project.game.touchit;
 
 import org.junit.Test;
 

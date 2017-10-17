@@ -1,4 +1,4 @@
-package com.example.avantika.clickit;
+package com.project.game.touchit;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class EndGame extends AppCompatActivity {
+public class EndGameActivity extends AppCompatActivity {
+
+    private static final String TAG = EndGameActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +28,8 @@ public class EndGame extends AppCompatActivity {
         playAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(EndGame.this, GameActivity.class);
-                EndGame.this.startActivity(myIntent);
+                Intent myIntent = new Intent(EndGameActivity.this, GameActivity.class);
+                EndGameActivity.this.startActivity(myIntent);
                 finish();
             }
         });
@@ -36,8 +37,8 @@ public class EndGame extends AppCompatActivity {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(EndGame.this, OptionsActivity.class);
-                EndGame.this.startActivity(myIntent);
+                Intent myIntent = new Intent(EndGameActivity.this, MainMenuActivity.class);
+                EndGameActivity.this.startActivity(myIntent);
                 finish();
             }
         });

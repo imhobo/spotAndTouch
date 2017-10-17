@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="50dp"
-    tools:context="com.example.avantika.clickit.EndGame">
+    tools:context="com.project.game.touchit.EndGameActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

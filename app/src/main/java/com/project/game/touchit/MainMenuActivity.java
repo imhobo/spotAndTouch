@@ -1,4 +1,4 @@
-package com.example.avantika.clickit;
+package com.project.game.touchit;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,12 +7,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class OptionsActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
+
+    private static final String TAG = MainMenuActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_options);
+        setContentView(R.layout.activity_main_menu);
 
         Button mode, settings, highScore;
         mode = (Button) findViewById(R.id.choose_mode);
@@ -22,23 +24,24 @@ public class OptionsActivity extends AppCompatActivity {
         mode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(OptionsActivity.this, ChooseMode.class);
-                OptionsActivity.this.startActivity(myIntent);
+                Intent myIntent = new Intent(MainMenuActivity.this, ChooseModeActivity.class);
+                MainMenuActivity.this.startActivity(myIntent);
             }
         });
 
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(OptionsActivity.this, SettingsActivity.class);
-                OptionsActivity.this.startActivity(myIntent);
+                Intent myIntent = new Intent(MainMenuActivity.this, SettingsActivity.class);
+                MainMenuActivity.this.startActivity(myIntent);
             }
         });
 
+        // TODO :: Implement a high score activity
         highScore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(OptionsActivity.this, "Go make your own.", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainMenuActivity.this, "Go make your own.", Toast.LENGTH_LONG).show();
             }
         });
     }

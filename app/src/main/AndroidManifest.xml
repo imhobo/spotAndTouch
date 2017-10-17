@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.avantika.clickit">
+    package="com.project.game.touchit">
 
     <application
         android:allowBackup="true"
@@ -11,22 +11,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".GameActivity"
+            android:name="com.project.game.touchit.GameActivity"
             android:label="@string/app_name"
             android:theme="@style/fullscreen">
         </activity>
-        <activity android:name=".EndGame">
+        <activity android:name="com.project.game.touchit.EndGameActivity">
         </activity>
-        <activity android:name=".OptionsActivity">
+        <activity android:name="com.project.game.touchit.MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ChooseMode">
+        <activity android:name="com.project.game.touchit.ChooseModeActivity">
         </activity>
-        <activity android:name=".SettingsActivity">
+        <activity android:name="com.project.game.touchit.SettingsActivity">
         </activity>
     </application>
 

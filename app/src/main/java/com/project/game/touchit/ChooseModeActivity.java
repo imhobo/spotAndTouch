@@ -1,4 +1,4 @@
-package com.example.avantika.clickit;
+package com.project.game.touchit;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class ChooseMode extends AppCompatActivity {
+public class ChooseModeActivity extends AppCompatActivity {
+
+    private static final String TAG = ChooseModeActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +20,9 @@ public class ChooseMode extends AppCompatActivity {
         speed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(ChooseMode.this, GameActivity.class);
+                Intent myIntent = new Intent(ChooseModeActivity.this, GameActivity.class);
                 myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                ChooseMode.this.startActivity(myIntent);
+                ChooseModeActivity.this.startActivity(myIntent);
                 finish();
             }
         });

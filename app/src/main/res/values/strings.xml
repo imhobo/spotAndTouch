@@ -1,9 +1,15 @@
 <resources>
     <string name="app_name">ClickIT</string>
     <string name="score">Score :</string>
+    <string name="time">Time :</string>
     <string name="title_activity_show_score">ShowScore</string>
     <string name="choose_grid">Grid size</string>
     <string name="choose_time">Time</string>
+
+    <string name="pause_title">Game Paused</string>
+    <string name="pause_message">Would you like to continue the game?</string>
+    <string name="pause_option_positive">Continue</string>
+    <string name="pause_option_negative">Go Back</string>
 
     <string-array name="allowed_grid_sizes">
         <item>2x2</item>

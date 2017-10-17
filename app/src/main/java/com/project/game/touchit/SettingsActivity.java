@@ -1,7 +1,5 @@
-package com.example.avantika.clickit;
+package com.project.game.touchit;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,12 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    private static final String TAG = SettingsActivity.class.getName();
 
     String[] allowedGridSizes = { "2x2", "3x3", "5x5"  };
     String[] allowedTimes = {"5", "15", "30"};
@@ -57,17 +53,17 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             switch (allowedGridSizes[position]) {
                 case "2x2":
                     editor = prefs.edit();
-                    editor.putInt(Constants.ORDER_GRID_KEY, 2);
+                    editor.putInt(Constants.PREFS_KEY_ORDERGRID, 2);
                     editor.apply();
                     break;
                 case "3x3":
                     editor = prefs.edit();
-                    editor.putInt(Constants.ORDER_GRID_KEY, 3);
+                    editor.putInt(Constants.PREFS_KEY_ORDERGRID, 3);
                     editor.apply();
                     break;
                 case "5x5":
                     editor = prefs.edit();
-                    editor.putInt(Constants.ORDER_GRID_KEY, 5);
+                    editor.putInt(Constants.PREFS_KEY_ORDERGRID, 5);
                     editor.apply();
                     break;
             }
@@ -76,17 +72,17 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             switch (allowedTimes[position]){
                 case "5":
                     editor = prefs.edit();
-                    editor.putInt(Constants.TOTAL_TIME_KEY, 5000);
+                    editor.putInt(Constants.PREFS_KEY_TIME, 5000);
                     editor.apply();
                     break;
                 case "15":
                     editor = prefs.edit();
-                    editor.putInt(Constants.TOTAL_TIME_KEY, 15000);
+                    editor.putInt(Constants.PREFS_KEY_TIME, 15000);
                     editor.apply();
                     break;
                 case "30":
                     editor = prefs.edit();
-                    editor.putInt(Constants.TOTAL_TIME_KEY, 30000);
+                    editor.putInt(Constants.PREFS_KEY_TIME, 30000);
                     editor.apply();
                     break;
             }
@@ -95,8 +91,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     }
 
     void setDefaultSelections() {
-        int selectedOrderGrid = prefs.getInt(Constants.ORDER_GRID_KEY, Constants.DEFAULT_ORDER_GRID);
-        int selectedTotalTime = prefs.getInt(Constants.TOTAL_TIME_KEY, Constants.DEFAULT_TOTAL_TIME);
+        int selectedOrderGrid = prefs.getInt(Constants.PREFS_KEY_ORDERGRID, Constants.DEFAULT_ORDER_GRID);
+        int selectedTotalTime = prefs.getInt(Constants.PREFS_KEY_TIME, Constants.DEFAULT_TOTAL_TIME);
 
         switch (selectedOrderGrid) {
             case 2: gridSize.setSelection(0);
