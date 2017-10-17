@@ -17,10 +17,10 @@ public class EndGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_end_game);
 
         Intent intent = getIntent();
-        String score = intent.getStringExtra("score");
+        String score = intent.getStringExtra(Constants.INTENT_PARAM_SCORE);
 
         TextView tvScore = (TextView) findViewById(R.id.endgame_score);
-        tvScore.setText("Score: "+ score);
+        tvScore.setText(getResources().getString(R.string.score) + " " + score);
 
         Button playAgain = (Button) findViewById(R.id.play_again);
         Button goBack = (Button) findViewById(R.id.go_back);
