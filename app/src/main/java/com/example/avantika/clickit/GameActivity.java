@@ -46,8 +46,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout gridLayout;
     RelativeLayout parentLayout;
     int tickTimer = 10;
-    Drawable selectedBox;
-    Drawable unselectedBox;
 
 
     //@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -88,18 +86,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             horLayout[i].setOrientation(LinearLayout.HORIZONTAL);
             horLayout[i].setWeightSum(orderGrid);
             horLayout[i].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+                    0, 1.0f));
             gridLayout.addView(horLayout[i]);
 
             for (int j = 0; j < orderGrid; j++) {
                 verLayout[i][j] = new LinearLayout(this);
                 verLayout[i][j].setId(i * orderGrid + j);
                 verLayout[i][j].setOrientation(LinearLayout.VERTICAL);
-                verLayout[i][j].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                verLayout[i][j].setLayoutParams(new LinearLayout.LayoutParams(0,
                         LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
                 horLayout[i].addView(verLayout[i][j]);
 //                verLayout[i][j].setBackgroundResource(R.drawable.custom_border_unselected);
-//                verLayout[i][j].setBackgroundResource();
+                verLayout[i][j].setBackgroundResource(R.drawable.open_window);
 
                 verLayout[i][j].setOnClickListener(this);
             }
@@ -109,24 +107,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-        int widthBox = (int)Math.ceil((float)width/orderGrid);
-        int heightBox = (int) Math.ceil(((float)height*0.8f)/orderGrid);
 
-        Log.d("INFO:HEIGHT", String.valueOf(height));
-        Log.d("INFO:WIDTH", String.valueOf(width));
-        Log.d("INFO:HEIGHTBOX", String.valueOf(heightBox));
-        Log.d("INFO:WIDTHBOX", String.valueOf(widthBox));
-
-        selectedBox = getScaledDrawable(R.drawable.close_window, widthBox, heightBox);
-        unselectedBox = getScaledDrawable(R.drawable.open_window, widthBox, heightBox);
-
-        for(int i=0;i<orderGrid;i++)
-        {
-            for(int j=0;j<orderGrid;j++)
-            {
-                setBackgroundDrawable(verLayout[i][j], unselectedBox);
-            }
-        }
+        Log.d("SCREENW",Integer.toString(width));
+        Log.d("SCREENH",Integer.toString(height));
 
         disableGrid();
         findViewById(R.id.tvTap).setVisibility(View.VISIBLE);
@@ -140,6 +123,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
         if(id == R.id.llmask)
         {
+
+
+            Log.d("TOPLAYOUTW",Integer.toString(findViewById(R.id.lltop).getWidth()));
+            Log.d("TOPLAYOUTH",Integer.toString(findViewById(R.id.lltop).getHeight()));
+
+            Log.d("GRIDLAYOUTW",Integer.toString(gridLayout.getWidth()));
+            Log.d("GRIDLAYOUTH",Integer.toString(gridLayout.getHeight()));
+
+            
             maskLayout.setOnClickListener(null);
 
             // is not in shared pref: totalTime = Constants.defaultTotalTime;
@@ -151,10 +143,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             prev = cur;
 
 
-
-            setBackgroundDrawable(verLayout[cur/orderGrid][cur%orderGrid], selectedBox);
 //            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
-//            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
+            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.close_window);
 
             startTimer();
             findViewById(R.id.tvTap).setVisibility(View.GONE);
@@ -171,12 +161,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 cur = rand.nextInt(orderGrid * orderGrid);
             }
 //            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundColor(Color.parseColor(selectedColor));
-//            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.custom_border_selected);
-            setBackgroundDrawable(verLayout[cur/orderGrid][cur%orderGrid], selectedBox);
+            verLayout[cur/orderGrid][cur%orderGrid].setBackgroundResource(R.drawable.close_window);
+
 
 //            verLayout[prev / orderGrid][prev % orderGrid].setBackgroundColor(Color.parseColor(backColor));
-//            verLayout[prev/orderGrid][prev%orderGrid].setBackgroundResource(R.drawable.custom_border_unselected);
-            setBackgroundDrawable(verLayout[prev/orderGrid][prev%orderGrid], unselectedBox);
+            verLayout[prev/orderGrid][prev%orderGrid].setBackgroundResource(R.drawable.open_window);
+
             prev=cur;
         }
 
