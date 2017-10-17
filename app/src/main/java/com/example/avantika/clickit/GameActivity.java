@@ -73,6 +73,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         pb = (ProgressBar) findViewById(R.id.progressBar);
         pb.setProgress(Constants.INITIAL_PROGRESS);
         pb.setScaleY(pb.getScaleY() * Constants.PROGRESS_MULTIPLIER);
+        pb.getProgressDrawable().setColorFilter(
+                Color.parseColor("#317677"), android.graphics.PorterDuff.Mode.SRC_IN);
+
 
         gridLayout = (LinearLayout) findViewById(R.id.llgrid);
         gridLayout.setWeightSum(orderGrid);
@@ -131,7 +134,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("GRIDLAYOUTW",Integer.toString(gridLayout.getWidth()));
             Log.d("GRIDLAYOUTH",Integer.toString(gridLayout.getHeight()));
 
-            
+
             maskLayout.setOnClickListener(null);
 
             // is not in shared pref: totalTime = Constants.defaultTotalTime;
